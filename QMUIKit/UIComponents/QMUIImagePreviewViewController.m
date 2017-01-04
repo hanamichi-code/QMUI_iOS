@@ -186,6 +186,8 @@ static QMUIImagePreviewViewController *imagePreviewViewControllerAppearance;
         
         if (!self.transitionImageView) {
             self.transitionImageView = [[UIImageView alloc] init];
+            self.transitionImageView.contentMode = UIViewContentModeScaleAspectFill;
+            self.transitionImageView.clipsToBounds = YES;
         }
         
         // 为动画做准备，先置为透明
