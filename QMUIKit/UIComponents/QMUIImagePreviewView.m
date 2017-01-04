@@ -54,6 +54,11 @@
     if (self) {
         
         _collectionViewLayout = [[QMUICollectionViewPagingLayout alloc] initWithStyle:QMUICollectionViewPagingLayoutStyleDefault];
+        _collectionViewLayout.velocityForEnsurePageDown = 0.1;
+        _collectionViewLayout.maximumScale = 1;
+        _collectionViewLayout.minimumScale = 1;
+        _collectionViewLayout.minimumInteritemSpacing = CGFLOAT_MIN;
+        _collectionViewLayout.minimumLineSpacing = CGFLOAT_MIN;
         self.collectionViewLayout.allowsMultipleItemScroll = NO;
         
         _collectionView = [[UICollectionView alloc] initWithFrame:CGRectMakeWithSize(frame.size) collectionViewLayout:self.collectionViewLayout];
@@ -115,6 +120,7 @@
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     QMUIImagePreviewCell *cell = (QMUIImagePreviewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
     cell.zoomImageView.delegate = self;
+    cell.zoomImageView.currentIndex = indexPath.row;
     ((UIActivityIndicatorView *)cell.zoomImageView.emptyView.loadingView).color = self.loadingColor;
     return cell;
 }
