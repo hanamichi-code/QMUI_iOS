@@ -64,7 +64,8 @@
 
 /// 每一页里的 loading 的颜色，默认为 UIColorWhite
 @property(nonatomic, strong) UIColor *loadingColor;
-
+/// 是否允许分页显示
+@property (nonatomic, assign) BOOL pagingEnabled;
 @end
 
 @interface QMUIImagePreviewView (QMUIZoomImageView)<QMUIZoomImageViewDelegate>

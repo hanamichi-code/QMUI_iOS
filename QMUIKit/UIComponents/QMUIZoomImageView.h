@@ -37,9 +37,9 @@
 
 /// 用于显示图片的 UIImageView，注意不要通过 imageView.image 来设置图片，请使用 image 属性。
 @property(nonatomic, strong, readonly) UIImageView *imageView;
-/// 是否允许分页显示
-@property (nonatomic, assign) BOOL pagingEnabled;
-/**
+///// 是否允许分页显示
+//@property (nonatomic, assign) BOOL pagingEnabled;
+///**
  *  获取当前正在显示的图片在整个 QMUIZoomImageView 坐标系里的 rect（会按照当前的缩放状态来计算）
  */
 - (CGRect)imageViewRectInZoomImageView;
