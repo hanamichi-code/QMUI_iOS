@@ -7,7 +7,10 @@
 //
 
 #import "QMUIConfigurationTemplate.h"
-#import <QMUIKit/QMUIKit.h>
+
+// 如果这里找不到QMUIKit.h，请尝试替换为 #import <QMUIKit/QMUIKit.h>
+#import "QMUIKit.h"
+
 
 // 此文件仅供复制使用，不能加到静态库的Compile Sources里面。
 
@@ -112,13 +115,13 @@
     //- QMUICMI.navBarTitleColor = NavBarTintColor;                                     // NavBarTitleColor
     //- QMUICMI.navBarTitleFont = UIFontBoldMake(17);                                   // NavBarTitleFont
     //- QMUICMI.navBarBackButtonTitlePositionAdjustment = UIOffsetZero;                 // NavBarBarBackButtonTitlePositionAdjustment
-    //- QMUICMI.navBarBackIndicatorImage = [UIImage imageWithShape:QMUIImageShapeNavBack size:CGSizeMake(12, 20) tintColor:NavBarTintColor];    // NavBarBackIndicatorImage
-    //- QMUICMI.navBarCloseButtonImage = [UIImage imageWithShape:QMUIImageShapeNavClose size:CGSizeMake(16, 16) tintColor:NavBarTintColor];     // NavBarCloseButtonImage
+    //- QMUICMI.navBarBackIndicatorImage = [UIImage qmui_imageWithShape:QMUIImageShapeNavBack size:CGSizeMake(12, 20) tintColor:NavBarTintColor];    // NavBarBackIndicatorImage
+    //- QMUICMI.navBarCloseButtonImage = [UIImage qmui_imageWithShape:QMUIImageShapeNavClose size:CGSizeMake(16, 16) tintColor:NavBarTintColor];     // NavBarCloseButtonImage
     
     //- QMUICMI.navBarLoadingMarginRight = 3;                                           // NavBarLoadingMarginRight
     //- QMUICMI.navBarAccessoryViewMarginLeft = 5;                                      // NavBarAccessoryViewMarginLeft
     //- QMUICMI.navBarActivityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;    // NavBarActivityIndicatorViewStyle
-    //- QMUICMI.navBarAccessoryViewTypeDisclosureIndicatorImage = [UIImage imageWithShape:QMUIImageShapeTriangle size:CGSizeMake(8, 5) tintColor:UIColorWhite];     // NavBarAccessoryViewTypeDisclosureIndicatorImage
+    //- QMUICMI.navBarAccessoryViewTypeDisclosureIndicatorImage = [UIImage qmui_imageWithShape:QMUIImageShapeTriangle size:CGSizeMake(8, 5) tintColor:UIColorWhite];     // NavBarAccessoryViewTypeDisclosureIndicatorImage
     
     #pragma mark - TabBar
     
@@ -167,8 +170,8 @@
     //- QMUICMI.tableViewCellWarningBackgroundColor = UIColorYellow;                        // TableViewCellWarningBackgroundColor
     //- QMUICMI.tableViewCellNormalHeight = 44;                                             // TableViewCellNormalHeight
     
-    //- QMUICMI.tableViewCellDisclosureIndicatorImage = [UIImage imageWithShape:QMUIImageShapeDisclosureIndicator size:CGSizeMake(8, 13) tintColor:UIColorMakeWithRGBA(0, 0, 0, .2)];       // TableViewCellDisclosureIndicatorImage
-    //- QMUICMI.tableViewCellCheckmarkImage = [UIImage imageWithShape:QMUIImageShapeCheckmark size:CGSizeMake(15, 12) tintColor:UIColorBlue];     // TableViewCellCheckmarkImage
+    //- QMUICMI.tableViewCellDisclosureIndicatorImage = [UIImage qmui_imageWithShape:QMUIImageShapeDisclosureIndicator size:CGSizeMake(8, 13) tintColor:UIColorMakeWithRGBA(0, 0, 0, .2)];       // TableViewCellDisclosureIndicatorImage
+    //- QMUICMI.tableViewCellCheckmarkImage = [UIImage qmui_imageWithShape:QMUIImageShapeCheckmark size:CGSizeMake(15, 12) tintColor:UIColorBlue];     // TableViewCellCheckmarkImage
     //- QMUICMI.tableViewSectionHeaderBackgroundColor = UIColorMake(244, 244, 244);                         // TableViewSectionHeaderBackgroundColor
     //- QMUICMI.tableViewSectionFooterBackgroundColor = UIColorMake(244, 244, 244);                         // TableViewSectionFooterBackgroundColor
     //- QMUICMI.tableViewSectionHeaderFont = UIFontBoldMake(12);                                            // TableViewSectionHeaderFont
@@ -202,6 +205,7 @@
     
     #pragma mark - Others
     
+    //- QMUICMI.supportedOrientationMask = UIInterfaceOrientationMaskPortrait;  // SupportedOrientationMask : 默认支持的横竖屏方向
     //- QMUICMI.statusbarStyleLightInitially = NO;          // StatusbarStyleLightInitially : 默认的状态栏内容是否使用白色，默认为NO，也即黑色
     //- QMUICMI.needsBackBarButtonItemTitle = NO;           // NeedsBackBarButtonItemTitle : 全局是否需要返回按钮的title，不需要则只显示一个返回image
     //- QMUICMI.hidesBottomBarWhenPushedInitially = YES;    // HidesBottomBarWhenPushedInitially : QMUICommonViewController.hidesBottomBarWhenPushed的初始值，默认为YES

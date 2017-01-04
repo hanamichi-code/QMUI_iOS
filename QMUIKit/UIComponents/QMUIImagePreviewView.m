@@ -42,6 +42,7 @@
 
 @interface QMUIImagePreviewView ()
 
+@property(nonatomic, assign) BOOL isChangingCollectionViewBounds;
 @property(nonatomic, assign) CGFloat previousIndexWhenScrolling;
 @end
 
@@ -75,10 +76,14 @@
     [super layoutSubviews];
     BOOL isCollectionViewSizeChanged = !CGSizeEqualToSize(self.collectionView.bounds.size, self.bounds.size);
     if (isCollectionViewSizeChanged) {
+        self.isChangingCollectionViewBounds = YES;
+        
         // 必须先 invalidateLayout，再更新 collectionView.frame，否则横竖屏旋转前后的图片不一致（因为 scrollViewDidScroll: 时 contentSize、contentOffset 那些是错的）
         [self.collectionViewLayout invalidateLayout];
         self.collectionView.frame = self.bounds;
         [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:self.currentImageIndex inSection:0] atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
+        
+        self.isChangingCollectionViewBounds = NO;
     }
 }
 
@@ -145,6 +150,10 @@
         return;
     }
     
+    if (self.isChangingCollectionViewBounds) {
+        return;
+    }
+    
     CGFloat pageWidth = [self collectionView:self.collectionView layout:self.collectionViewLayout sizeForItemAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:0]].width;
     CGFloat pageHorizontalMargin = self.collectionViewLayout.minimumLineSpacing;
     CGFloat contentOffsetX = self.collectionView.contentOffset.x;
@@ -189,7 +198,7 @@
 
 - (void)checkIfDelegateMissing {
 #ifdef DEBUG
-    [NSObject enumerateProtocolMethods:@protocol(QMUIZoomImageViewDelegate) usingBlock:^(SEL selector) {
+    [NSObject qmui_enumerateProtocolMethods:@protocol(QMUIZoomImageViewDelegate) usingBlock:^(SEL selector) {
         if (![self respondsToSelector:selector]) {
             NSAssert(NO, @"%@ 需要响应 %@ 的方法 -%@", NSStringFromClass([self class]), NSStringFromProtocol(@protocol(QMUIZoomImageViewDelegate)), NSStringFromSelector(selector));
         }

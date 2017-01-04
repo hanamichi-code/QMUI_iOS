@@ -7,34 +7,10 @@
 //
 
 #import "QMUIAppDelegate.h"
-#import "QMUIViewController.h"
-#import "QMUINavigationController.h"
 
 @implementation QMUIAppDelegate
 
-+ (void)load {
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        // 在QMUI的项目里面启动QMUI的配置，跟外面使用无关。
-        [[QMUIConfigurationManager sharedInstance] initDefaultConfiguration];
-        
-        // 渲染全局样式
-        [QMUICommonUI renderGlobalAppearances];
-    });
-}
-
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-{
-    // statusBar样式初始化
-    [QMUIHelper renderStatusBarStyleDark];
-    
-    // 启动代码
-    QMUIViewController *viewController = [[QMUIViewController alloc] init];
-    QMUINavigationController *navigationController = [[QMUINavigationController alloc] initWithRootViewController:viewController];
-    
-    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    self.window.rootViewController = navigationController;
-    [self.window makeKeyAndVisible];
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     return YES;
 }
 

@@ -10,6 +10,8 @@
 #import "QMUICommonDefines.h"
 #import "QMUIConfiguration.h"
 #import "UIImage+QMUI.h"
+#import "QMUIButton.h"
+#import "QMUITabBarViewController.h"
 
 @implementation QMUIConfigurationManager
 
@@ -31,8 +33,7 @@
 
 #pragma mark - 初始化默认值
 
-- (void)initDefaultConfiguration
-{
+- (void)initDefaultConfiguration {
     
     #pragma mark - Global Color
     
@@ -122,13 +123,13 @@
     self.navBarTitleColor = nil;
     self.navBarTitleFont = UIFontBoldMake(17);
     self.navBarBackButtonTitlePositionAdjustment = UIOffsetZero;
-    self.navBarBackIndicatorImage = [UIImage imageWithShape:QMUIImageShapeNavBack size:CGSizeMake(12, 20) tintColor:self.navBarTintColor];
-    self.navBarCloseButtonImage = [UIImage imageWithShape:QMUIImageShapeNavClose size:CGSizeMake(16, 16) tintColor:self.navBarTintColor];
+    self.navBarBackIndicatorImage = [UIImage qmui_imageWithShape:QMUIImageShapeNavBack size:CGSizeMake(12, 20) tintColor:self.navBarTintColor];
+    self.navBarCloseButtonImage = [UIImage qmui_imageWithShape:QMUIImageShapeNavClose size:CGSizeMake(16, 16) tintColor:self.navBarTintColor];
     
     self.navBarLoadingMarginRight = 3;
     self.navBarAccessoryViewMarginLeft = 5;
     self.navBarActivityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;
-    self.navBarAccessoryViewTypeDisclosureIndicatorImage = [[UIImage imageWithShape:QMUIImageShapeTriangle size:CGSizeMake(8, 5) tintColor:self.whiteColor] imageWithOrientation:UIImageOrientationDown];
+    self.navBarAccessoryViewTypeDisclosureIndicatorImage = [[UIImage qmui_imageWithShape:QMUIImageShapeTriangle size:CGSizeMake(8, 5) tintColor:self.whiteColor] qmui_imageWithOrientation:UIImageOrientationDown];
     
     #pragma mark - TabBar
     
@@ -177,8 +178,8 @@
     self.tableViewCellWarningBackgroundColor = self.yellowColor;
     self.tableViewCellNormalHeight = 44;
     
-    self.tableViewCellDisclosureIndicatorImage = [UIImage imageWithShape:QMUIImageShapeDisclosureIndicator size:CGSizeMake(8, 13) tintColor:UIColorMakeWithRGBA(0, 0, 0, .2)];
-    self.tableViewCellCheckmarkImage = [UIImage imageWithShape:QMUIImageShapeCheckmark size:CGSizeMake(15, 12) tintColor:UIColorBlue];
+    self.tableViewCellDisclosureIndicatorImage = [UIImage qmui_imageWithShape:QMUIImageShapeDisclosureIndicator size:CGSizeMake(8, 13) tintColor:UIColorMakeWithRGBA(0, 0, 0, .2)];
+    self.tableViewCellCheckmarkImage = [UIImage qmui_imageWithShape:QMUIImageShapeCheckmark size:CGSizeMake(15, 12) tintColor:UIColorBlue];
     self.tableViewSectionHeaderBackgroundColor = UIColorMake(244, 244, 244);
     self.tableViewSectionFooterBackgroundColor = UIColorMake(244, 244, 244);
     self.tableViewSectionHeaderFont = UIFontBoldMake(12);
@@ -206,9 +207,45 @@
     
     #pragma mark - Others
     
+    self.supportedOrientationMask = UIInterfaceOrientationMaskPortrait;
     self.statusbarStyleLightInitially = NO;
     self.needsBackBarButtonItemTitle = NO;
     self.hidesBottomBarWhenPushedInitially = YES;
+}
+
+@end
+
+@implementation QMUIConfigurationManager (UIAppearance)
+
++ (void)renderGlobalAppearances {
+    
+    // QMUIButton
+    [QMUINavigationButton renderNavigationButtonAppearanceStyle];
+    [QMUIToolbarButton renderToolbarButtonAppearanceStyle];
+    
+    // UINavigationBar
+    UINavigationBar *navigationBarAppearance = [UINavigationBar appearance];
+    [navigationBarAppearance setBarTintColor:NavBarBarTintColor];
+    [navigationBarAppearance setBackgroundImage:NavBarBackgroundImage forBarMetrics:UIBarMetricsDefault];
+    [navigationBarAppearance setShadowImage:NavBarShadowImage];
+    
+    // UIToolBar
+    UIToolbar *toolBarAppearance = [UIToolbar appearance];
+    [toolBarAppearance setBarTintColor:ToolBarBarTintColor];
+    [toolBarAppearance setBackgroundImage:ToolBarBackgroundImage forToolbarPosition:UIBarPositionAny barMetrics:UIBarMetricsDefault];
+    [toolBarAppearance setShadowImage:[UIImage qmui_imageWithColor:ToolBarShadowImageColor size:CGSizeMake(1, PixelOne) cornerRadius:0] forToolbarPosition:UIBarPositionAny];
+    
+    // UITabBar
+    UITabBar *tabBarAppearance = [UITabBar appearance];
+    [tabBarAppearance setBarTintColor:TabBarBarTintColor];
+    [tabBarAppearance setBackgroundImage:TabBarBackgroundImage];
+    [tabBarAppearance setShadowImage:[UIImage qmui_imageWithColor:TabBarShadowImageColor size:CGSizeMake(1, PixelOne) cornerRadius:0]];
+    
+    
+    // UITabBarItem
+    UITabBarItem *tabBarItemAppearance = [UITabBarItem appearanceWhenContainedIn:[QMUITabBarViewController class], nil];
+    [tabBarItemAppearance setTitleTextAttributes:@{NSForegroundColorAttributeName:TabBarItemTitleColor} forState:UIControlStateNormal];
+    [tabBarItemAppearance setTitleTextAttributes:@{NSForegroundColorAttributeName:TabBarItemTitleColorSelected} forState:UIControlStateSelected];
 }
 
 @end
