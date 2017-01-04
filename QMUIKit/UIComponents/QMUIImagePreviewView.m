@@ -68,6 +68,7 @@
         self.collectionView.showsHorizontalScrollIndicator = NO;
         self.collectionView.showsVerticalScrollIndicator = NO;
         self.collectionView.scrollsToTop = NO;
+        self.collectionView.pagingEnabled = YES;
         [self.collectionView registerClass:[QMUIImagePreviewCell class] forCellWithReuseIdentifier:@"cell"];
         [self addSubview:self.collectionView];
         
