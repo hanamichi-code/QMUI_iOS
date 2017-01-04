@@ -32,6 +32,7 @@
         self.scrollView.minimumZoomScale = 0;
         self.scrollView.maximumZoomScale = self.maximumZoomScale;
         self.scrollView.delegate = self;
+        self.scrollView.pagingEnabled = self.pagingEnabled;
         [self addSubview:self.scrollView];
         
         _imageView = [[UIImageView alloc] init];
