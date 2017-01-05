@@ -66,6 +66,8 @@
 @property(nonatomic, strong) UIColor *loadingColor;
 /// 是否允许分页显示
 @property (nonatomic, assign) BOOL pagingEnabled;
+/// 图片 contentMode
+@property (nonatomic, assign) UIViewContentMode contentMode;
 @end
 
 @interface QMUIImagePreviewView (QMUIZoomImageView)<QMUIZoomImageViewDelegate>

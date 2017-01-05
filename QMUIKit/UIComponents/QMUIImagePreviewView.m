@@ -27,6 +27,7 @@
     if (self) {
         self.backgroundColor = UIColorClear;
         self.zoomImageView = [[QMUIZoomImageView alloc] init];
+        self.zoomImageView.contentMode = self.contentMode;
         [self.contentView addSubview:self.zoomImageView];
     }
     return self;
