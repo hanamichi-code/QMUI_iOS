@@ -21,6 +21,22 @@
 
 @implementation QMUIZoomImageView
 
+- (void)dealloc {
+    [self removeObserver:self forKeyPath:@"imageView.image"];
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
+    if ([keyPath isEqualToString:@"imageView.image"]) {
+        NSLog(@"%@", change);
+        UIImage *image = change[@"new"];
+        if (image) {
+            // 更新 imageView 的大小时，imageView 可能已经被缩放过，所以要应用当前的缩放
+            self.imageView.frame = CGRectApplyAffineTransform(CGRectMakeWithSize(image.size), self.imageView.transform);
+            [self revertZooming];
+        }
+    }
+}
+
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         self.contentMode = UIViewContentModeCenter;
@@ -37,6 +53,7 @@
         
         _imageView = [[UIImageView alloc] init];
         [self.scrollView addSubview:self.imageView];
+        [self addObserver:self forKeyPath:@"imageView.image" options:NSKeyValueObservingOptionNew context:nil];
         
         _emptyView = [[QMUIEmptyView alloc] init];
         ((UIActivityIndicatorView *)self.emptyView.loadingView).color = UIColorWhite;
@@ -85,9 +102,6 @@
 
 - (void)setImage:(UIImage *)image {
     self.imageView.image = image;
-    // 更新 imageView 的大小时，imageView 可能已经被缩放过，所以要应用当前的缩放
-    self.imageView.frame = CGRectApplyAffineTransform(CGRectMakeWithSize(image.size), self.imageView.transform);
-    [self revertZooming];
 }
 
 - (UIImage *)image {

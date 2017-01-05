@@ -36,7 +36,7 @@
 @property(nonatomic, strong) UIImage *image;
 
 /// 用于显示图片的 UIImageView，注意不要通过 imageView.image 来设置图片，请使用 image 属性。
-@property(nonatomic, strong, readonly) UIImageView *imageView;
+@property(nonatomic, strong) UIImageView *imageView;
 /// 当前位置
 @property (nonatomic, assign) NSUInteger currentIndex;
 /**
