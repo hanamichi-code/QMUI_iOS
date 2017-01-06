@@ -29,7 +29,7 @@
     if ([keyPath isEqualToString:@"imageView.image"]) {
         NSLog(@"%@", change);
         UIImage *image = change[@"new"];
-        if (image) {
+        if (image && [image isKindOfClass:[NSNull class]]) {
             // 更新 imageView 的大小时，imageView 可能已经被缩放过，所以要应用当前的缩放
             self.imageView.frame = CGRectApplyAffineTransform(CGRectMakeWithSize(image.size), self.imageView.transform);
             [self revertZooming];
