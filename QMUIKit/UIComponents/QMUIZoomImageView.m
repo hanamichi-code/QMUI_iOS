@@ -21,6 +21,9 @@
 
 @implementation QMUIZoomImageView
 
+@synthesize image = _image;
+
+
 - (void)dealloc {
     [self removeObserver:self forKeyPath:@"imageView.image"];
 }
@@ -97,8 +100,8 @@
 }
 
 #pragma mark - Normal Image
-
 - (void)setImage:(UIImage *)image {
+    _image = image;
     // 更新 imageView 的大小时，imageView 可能已经被缩放过，所以要应用当前的缩放
     self.imageView.frame = CGRectApplyAffineTransform(CGRectMakeWithSize(image.size), self.imageView.transform);
     
@@ -108,8 +111,9 @@
 }
 
 - (UIImage *)image {
-    return self.imageView.image;
+    return _image;
 }
+
 
 #pragma mark - Live Photo
 
