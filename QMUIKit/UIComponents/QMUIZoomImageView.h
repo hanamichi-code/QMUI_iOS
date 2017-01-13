@@ -44,8 +44,6 @@
 /// 当前位置
 @property (nonatomic, assign) NSUInteger currentIndex;
 
-@property(nonatomic, strong, readonly) UIImageView *imageView;
-
 /// 设置当前要显示的 Live Photo，会把 image 相关内容清空，因此注意不要直接通过 livePhotoView.livePhoto 来设置
 @property(nonatomic, strong) PHLivePhoto *livePhoto NS_AVAILABLE_IOS(9_1);
 
