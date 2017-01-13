@@ -23,7 +23,6 @@
 
 @synthesize image = _image;
 
-
 - (void)dealloc {
     [self removeObserver:self forKeyPath:@"imageView.image"];
 }
@@ -38,6 +37,7 @@
     }
 }
 
+
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         self.contentMode = UIViewContentModeCenter;
@@ -49,7 +49,6 @@
         self.scrollView.minimumZoomScale = 0;
         self.scrollView.maximumZoomScale = self.maximumZoomScale;
         self.scrollView.delegate = self;
-        self.scrollView.pagingEnabled = YES;
         [self addSubview:self.scrollView];
         
         _imageView = [[UIImageView alloc] init];
@@ -113,7 +112,6 @@
 - (UIImage *)image {
     return _image;
 }
-
 
 #pragma mark - Live Photo
 

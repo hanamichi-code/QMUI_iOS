@@ -46,13 +46,15 @@ static QMUIImagePreviewViewController *imagePreviewViewControllerAppearance;
 
 @synthesize imagePreviewView = _imagePreviewView;
 
-- (void)didInitialized {
-    [super didInitialized];
-    self.automaticallyAdjustsScrollViewInsets = NO;
-    
-    if (imagePreviewViewControllerAppearance) {
-        self.backgroundColor = [QMUIImagePreviewViewController appearance].backgroundColor;
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+    if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
+        self.automaticallyAdjustsScrollViewInsets = NO;
+        
+        if (imagePreviewViewControllerAppearance) {
+            self.backgroundColor = [QMUIImagePreviewViewController appearance].backgroundColor;
+        }
     }
+    return self;
 }
 
 - (QMUIImagePreviewView *)imagePreviewView {
@@ -119,7 +121,7 @@ static QMUIImagePreviewViewController *imagePreviewViewControllerAppearance;
         CGRect transitionFromRect = self.previewFromRect;
         CGRect transitionToRect = [self.view convertRect:[zoomImageView imageViewRectInZoomImageView] fromView:zoomImageView.superview];
         
-        self.transitionImageView.contentMode = zoomImageView.imageView.contentMode;
+        self.transitionImageView.contentMode = UIViewContentModeScaleAspectFill;
         self.transitionImageView.image = zoomImageView.imageView.image;
         self.transitionImageView.frame = transitionFromRect;
         [self.view addSubview:self.transitionImageView];
@@ -184,7 +186,6 @@ static QMUIImagePreviewViewController *imagePreviewViewControllerAppearance;
         
         if (!self.transitionImageView) {
             self.transitionImageView = [[UIImageView alloc] init];
-            self.transitionImageView.contentMode = UIViewContentModeScaleAspectFill;
             self.transitionImageView.clipsToBounds = YES;
         }
         

@@ -26,8 +26,8 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.backgroundColor = UIColorClear;
+        
         self.zoomImageView = [[QMUIZoomImageView alloc] init];
-        self.zoomImageView.contentMode = self.contentMode;
         [self.contentView addSubview:self.zoomImageView];
     }
     return self;
@@ -138,7 +138,6 @@
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     QMUIImagePreviewCell *cell = (QMUIImagePreviewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
     cell.zoomImageView.delegate = self;
-    cell.zoomImageView.currentIndex = indexPath.row;
     ((UIActivityIndicatorView *)cell.zoomImageView.emptyView.loadingView).color = self.loadingColor;
     return cell;
 }
