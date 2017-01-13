@@ -138,6 +138,7 @@
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     QMUIImagePreviewCell *cell = (QMUIImagePreviewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
     cell.zoomImageView.delegate = self;
+    cell.zoomImageView.currentIndex = indexPath.row;
     ((UIActivityIndicatorView *)cell.zoomImageView.emptyView.loadingView).color = self.loadingColor;
     return cell;
 }
