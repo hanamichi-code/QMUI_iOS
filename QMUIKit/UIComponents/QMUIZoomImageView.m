@@ -41,7 +41,7 @@
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         self.contentMode = UIViewContentModeCenter;
-        self.maximumZoomScale = 2.0;
+        self.maximumZoomScale = 1.2;
         
         self.scrollView = [[UIScrollView alloc] init];
         self.scrollView.showsHorizontalScrollIndicator = NO;
@@ -213,7 +213,8 @@
     self.scrollView.panGestureRecognizer.enabled = enabledZoomImageView;
     self.scrollView.pinchGestureRecognizer.enabled = enabledZoomImageView;
     self.scrollView.minimumZoomScale = minimumZoomScale;
-    self.scrollView.maximumZoomScale = maximumZoomScale;
+    self.maximumZoomScale = minimumZoomScale * 1.5;
+    self.scrollView.maximumZoomScale = self.maximumZoomScale;
     [self setZoomScale:zoomScale animated:NO];
     
     // 只有前后的 zoomScale 不相等，才会触发 UIScrollViewDelegate scrollViewDidZoom:，因此对于相等的情况要自己手动触发
@@ -304,14 +305,14 @@
         if (self.scrollView.zoomScale >= self.scrollView.maximumZoomScale) {
             [self setZoomScale:self.scrollView.minimumZoomScale animated:YES];
         } else {
-            CGFloat newZoomScale = 0;
-            if (self.scrollView.zoomScale < 1) {
-                // 如果目前显示的大小比原图小，则放大到原图
-                newZoomScale = 1;
-            } else {
-                // 如果当前显示原图，则放大到最大的大小
-                newZoomScale = self.scrollView.maximumZoomScale;
-            }
+            CGFloat newZoomScale = self.scrollView.maximumZoomScale;
+//            if (self.scrollView.zoomScale < 1) {
+//                // 如果目前显示的大小比原图小，则放大到原图
+//                newZoomScale = 1;
+//            } else {
+//                // 如果当前显示原图，则放大到最大的大小
+//                newZoomScale = self.scrollView.maximumZoomScale;
+//            }
             
             CGRect zoomRect = CGRectZero;
             CGPoint tapPoint = [[self currentContentImageView] convertPoint:gesturePoint fromView:gestureRecognizer.view];
