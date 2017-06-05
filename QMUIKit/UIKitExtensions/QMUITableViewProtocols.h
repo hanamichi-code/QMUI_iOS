@@ -13,18 +13,13 @@
 @protocol qmui_UITableViewDataSource
 
 @optional
-- (UITableViewCell *)qmui_tableView:(UITableView *)tableView cellWithIdentifier:(NSString *)identifier;
+- (__kindof UITableViewCell *)qmui_tableView:(UITableView *)tableView cellWithIdentifier:(NSString *)identifier;
 
 @end
 
 @protocol QMUITableViewDelegate <UITableViewDelegate>
 
 @optional
-
-/**
- * 控制是否在列表顶部显示搜索框。在QMUICommonTableViewController里已经接管了searchBar的初始化工作，所以外部只需要控制“显示/隐藏”，不需要自己再初始化一次。
- */
-- (BOOL)shouldShowSearchBarInTableView:(QMUITableView *)tableView;
 
 /**
  * 自定义要在<i>- (BOOL)touchesShouldCancelInContentView:(UIView *)view</i>内的逻辑<br/>

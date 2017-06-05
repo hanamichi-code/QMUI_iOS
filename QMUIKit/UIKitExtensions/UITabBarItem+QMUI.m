@@ -7,7 +7,7 @@
 //
 
 #import "UITabBarItem+QMUI.h"
-#import "QMUICommonDefines.h"
+#import "QMUICore.h"
 
 @implementation UITabBarItem (QMUI)
 
@@ -37,6 +37,15 @@
 
     }
     return nil;
+}
+
+static char kAssociatedObjectKey_doubleTapBlock;
+- (void)setQmui_doubleTapBlock:(void (^)(UITabBarItem *, NSInteger))qmui_doubleTapBlock {
+    objc_setAssociatedObject(self, &kAssociatedObjectKey_doubleTapBlock, qmui_doubleTapBlock, OBJC_ASSOCIATION_COPY_NONATOMIC);
+}
+
+- (void (^)(UITabBarItem *, NSInteger))qmui_doubleTapBlock {
+    return (void (^)(UITabBarItem *, NSInteger))objc_getAssociatedObject(self, &kAssociatedObjectKey_doubleTapBlock);
 }
 
 @end

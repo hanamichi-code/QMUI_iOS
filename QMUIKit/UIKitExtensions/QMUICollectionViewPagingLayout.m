@@ -7,7 +7,7 @@
 //
 
 #import "QMUICollectionViewPagingLayout.h"
-#import "QMUICommonDefines.h"
+#import "QMUICore.h"
 
 @interface QMUICollectionViewPagingLayout () {
     CGFloat _maximumScale;
@@ -181,7 +181,7 @@ const CGFloat QMUICollectionViewPagingLayoutRotationRadiusAutomatic = -1.0;
         }
     }
     
-    proposedContentOffset.x = roundf(proposedContentOffset.x / itemSpacing) * itemSpacing;
+    proposedContentOffset.x = round(proposedContentOffset.x / itemSpacing) * itemSpacing;
     
     return proposedContentOffset;
 }

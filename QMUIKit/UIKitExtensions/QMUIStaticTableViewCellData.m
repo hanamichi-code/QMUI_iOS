@@ -7,9 +7,8 @@
 //
 
 #import "QMUIStaticTableViewCellData.h"
-#import "QMUIHelper.h"
+#import "QMUICore.h"
 #import "QMUITableViewCell.h"
-#import "QMUICommonDefines.h"
 
 @implementation QMUIStaticTableViewCellData
 
@@ -110,7 +109,7 @@
     
     QMUITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
     if (!cell) {
-        cell = [[cellClass alloc] initForTableView:(QMUITableView *)tableView withStyle:data.style reuseIdentifier:identifier];
+        cell = [[cellClass alloc] initForTableView:tableView withStyle:data.style reuseIdentifier:identifier];
     }
     cell.imageView.image = data.image;
     cell.textLabel.text = data.text;

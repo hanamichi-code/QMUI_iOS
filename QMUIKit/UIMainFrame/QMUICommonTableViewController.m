@@ -7,8 +7,7 @@
 //
 
 #import "QMUICommonTableViewController.h"
-#import "QMUICommonDefines.h"
-#import "QMUIConfiguration.h"
+#import "QMUICore.h"
 #import "QMUITableView.h"
 #import "QMUIEmptyView.h"
 #import "QMUILabel.h"
@@ -20,8 +19,9 @@ const UIEdgeInsets QMUICommonTableViewControllerInitialContentInsetNotSet = {-1,
 const NSInteger kSectionHeaderFooterLabelTag = 1024;
 
 @interface QMUICommonTableViewController () {
-    QMUISearchController *_searchController;
-    UISearchBar *_searchBar;
+    BOOL                    _shouldShowSearchBar;
+    QMUISearchController    *_searchController;
+    UISearchBar             *_searchBar;
 }
 
 @property(nonatomic,strong,readwrite) QMUITableView *tableView;
@@ -70,7 +70,15 @@ const NSInteger kSectionHeaderFooterLabelTag = 1024;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor = self.style == UITableViewStylePlain ? TableViewBackgroundColor : TableViewGroupedBackgroundColor;
+    UIColor *backgroundColor = nil;
+    if (self.style == UITableViewStylePlain) {
+        backgroundColor = TableViewBackgroundColor;
+    } else {
+        backgroundColor = TableViewGroupedBackgroundColor;
+    }
+    if (backgroundColor) {
+        self.view.backgroundColor = backgroundColor;
+    }
 }
 
 - (void)initSubviews {
@@ -82,6 +90,7 @@ const NSInteger kSectionHeaderFooterLabelTag = 1024;
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self.tableView qmui_clearsSelection];
+    [self.searchController.tableView qmui_clearsSelection];
 }
 
 - (void)viewDidLayoutSubviews {
@@ -103,7 +112,7 @@ const NSInteger kSectionHeaderFooterLabelTag = 1024;
         self.hasSetInitialContentInset = YES;
     }
     
-    [self hideTableHeaderViewInitialIfCanWithAnimated:NO];
+    [self hideTableHeaderViewInitialIfCanWithAnimated:NO force:NO];
     
     [self layoutEmptyView];
 }
@@ -118,8 +127,8 @@ const NSInteger kSectionHeaderFooterLabelTag = 1024;
     return _tableView;
 }
 
-- (void)hideTableHeaderViewInitialIfCanWithAnimated:(BOOL)animated {
-    if (self.tableView.tableHeaderView && [self shouldHideTableHeaderViewInitial] && !self.hasHideTableHeaderViewInitial) {
+- (void)hideTableHeaderViewInitialIfCanWithAnimated:(BOOL)animated force:(BOOL)force {
+    if (self.tableView.tableHeaderView && [self shouldHideTableHeaderViewInitial] && (force || !self.hasHideTableHeaderViewInitial)) {
         CGPoint contentOffset = CGPointMake(self.tableView.contentOffset.x, self.tableView.contentOffset.y + CGRectGetHeight(self.tableView.tableHeaderView.frame));
         [self.tableView setContentOffset:contentOffset animated:animated];
         self.hasHideTableHeaderViewInitial = YES;
@@ -165,10 +174,14 @@ const NSInteger kSectionHeaderFooterLabelTag = 1024;
 
 - (void)hideEmptyView {
     [self.emptyView removeFromSuperview];
-    if ([self shouldShowSearchBarInTableView:self.tableView] && [self shouldHideSearchBarWhenEmptyViewShowing] && self.tableView.tableHeaderView == nil) {
+BeginIgnoreDeprecatedWarning
+    if (self.shouldShowSearchBar && [self shouldHideSearchBarWhenEmptyViewShowing] && self.tableView.tableHeaderView == nil) {
+EndIgnoreDeprecatedWarning
         [self initSearchController];
+        // 隐藏 emptyView 后重新设置 tableHeaderView，会导致原先 shouldHideTableHeaderViewInitial 隐藏头部的操作被重置，所以下面的 force 参数要传 YES
+        // https://github.com/QMUI/QMUI_iOS/issues/128
         self.tableView.tableHeaderView = self.searchBar;
-        [self hideTableHeaderViewInitialIfCanWithAnimated:NO];
+        [self hideTableHeaderViewInitialIfCanWithAnimated:NO force:YES];
     }
 }
 
@@ -186,10 +199,6 @@ const NSInteger kSectionHeaderFooterLabelTag = 1024;
 }
 
 #pragma mark - <QMUITableViewDelegate, QMUITableViewDataSource>
-
-- (BOOL)shouldShowSearchBarInTableView:(QMUITableView *)tableView {
-    return NO;
-}
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
@@ -329,6 +338,35 @@ const NSInteger kSectionHeaderFooterLabelTag = 1024;
 
 @implementation QMUICommonTableViewController (Search)
 
+- (BOOL)shouldShowSearchBar {
+    return _shouldShowSearchBar;
+}
+
+- (void)setShouldShowSearchBar:(BOOL)shouldShowSearchBar {
+    BOOL isValueChanged = _shouldShowSearchBar != shouldShowSearchBar;
+    if (!isValueChanged) {
+        return;
+    }
+    
+    _shouldShowSearchBar = shouldShowSearchBar;
+    
+    if (shouldShowSearchBar) {
+        [self initSearchController];
+    } else {
+        if (self.searchBar) {
+            if (self.tableView.tableHeaderView == self.searchBar) {
+                self.tableView.tableHeaderView = nil;
+            }
+            [self.searchBar removeFromSuperview];
+            _searchBar = nil;
+        }
+        if (self.searchController) {
+            self.searchController.searchResultsDelegate = nil;
+            _searchController = nil;
+        }
+    }
+}
+
 - (QMUISearchController *)searchController {
     return _searchController;
 }
@@ -338,7 +376,9 @@ const NSInteger kSectionHeaderFooterLabelTag = 1024;
 }
 
 - (void)initSearchController {
-    if ([self.tableView.delegate shouldShowSearchBarInTableView:self.tableView] && !self.searchController) {
+BeginIgnoreDeprecatedWarning
+    if ([self isViewLoaded] && self.shouldShowSearchBar && !self.searchController) {
+EndIgnoreDeprecatedWarning
         _searchController = [[QMUISearchController alloc] initWithContentsViewController:self];
         self.searchController.searchResultsDelegate = self;
         self.searchController.searchBar.placeholder = @"搜索";

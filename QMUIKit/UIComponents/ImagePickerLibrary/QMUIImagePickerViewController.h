@@ -24,6 +24,10 @@
  */
 - (QMUIImagePickerPreviewViewController *)imagePickerPreviewViewControllerForImagePickerViewController:(QMUIImagePickerViewController *)imagePickerViewController;
 
+/**
+ *  控制照片的排序，若不实现，默认为 QMUIAlbumSortTypePositive
+ *  @note 注意返回值会决定第一次进来相片列表时列表默认的滚动位置，如果为 QMUIAlbumSortTypePositive，则列表默认滚动到底部，如果为 QMUIAlbumSortTypeReverse，则列表默认滚动到顶部。
+ */
 - (QMUIAlbumSortType)albumSortTypeForImagePickerViewController:(QMUIImagePickerViewController *)imagePickerViewController;
 
 /**
@@ -35,7 +39,7 @@
 - (void)imagePickerViewController:(QMUIImagePickerViewController *)imagePickerViewController didFinishPickingImageWithImagesAssetArray:(NSMutableArray<QMUIAsset *> *)imagesAssetArray;
 
 /**
- *  image被点击时调用（先调用这个接口，然后才去走预览大图的逻辑）
+ *  cell 被点击时调用（先调用这个接口，然后才去走预览大图的逻辑），注意这并非指选中 checkbox 事件
  *
  *  @param imagePickerViewController        对应的 QMUIImagePickerViewController
  *  @param imageAsset                       被选中的图片的 QMUIAsset 对象
@@ -43,10 +47,16 @@
  */
 - (void)imagePickerViewController:(QMUIImagePickerViewController *)imagePickerViewController didSelectImageWithImagesAsset:(QMUIAsset *)imageAsset afterImagePickerPreviewViewControllerUpdate:(QMUIImagePickerPreviewViewController *)imagePickerPreviewViewController;
 
+/// 即将选中 checkbox 时调用
 - (void)imagePickerViewController:(QMUIImagePickerViewController *)imagePickerViewController willCheckImageAtIndex:(NSInteger)index;
+
+/// 选中了 checkbox 之后调用
 - (void)imagePickerViewController:(QMUIImagePickerViewController *)imagePickerViewController didCheckImageAtIndex:(NSInteger)index;
 
+/// 即将取消选中 checkbox 时调用
 - (void)imagePickerViewController:(QMUIImagePickerViewController *)imagePickerViewController willUncheckImageAtIndex:(NSInteger)index;
+
+/// 取消了 checkbox 选中之后调用
 - (void)imagePickerViewController:(QMUIImagePickerViewController *)imagePickerViewController didUncheckImageAtIndex:(NSInteger)index;
 
 /**
@@ -54,12 +64,28 @@
  */
 - (void)imagePickerViewControllerDidCancel:(QMUIImagePickerViewController *)imagePickerViewController;
 
+/**
+ *  即将需要显示 Loading 时调用
+ *
+ *  @see shouldShowDefaultLoadingView
+ */
+- (void)imagePickerViewControllerWillStartLoad:(QMUIImagePickerViewController *)imagePickerViewController;
+
+/**
+ *  即将需要隐藏 Loading 时调用
+ *
+ *  @see shouldShowDefaultLoadingView
+ */
+- (void)imagePickerViewControllerWillFinishLoad:(QMUIImagePickerViewController *)imagePickerViewController;
+
 @end
 
 
 @interface QMUIImagePickerViewController : QMUICommonViewController<UICollectionViewDataSource,UICollectionViewDelegate,QMUIImagePickerPreviewViewControllerDelegate>
 
-/// 图片的最小尺寸，布局时如果有剩余空间，会将空间分配给图片大小，所以最终显示出来的大小不一定等于minimumImageWidth。默认是75
+/**
+ *  图片的最小尺寸，布局时如果有剩余空间，会将空间分配给图片大小，所以最终显示出来的大小不一定等于minimumImageWidth。默认是75。
+ */
 @property(nonatomic, assign) CGFloat minimumImageWidth UI_APPEARANCE_SELECTOR;
 
 @property(nonatomic, weak) id<QMUIImagePickerViewControllerDelegate>imagePickerViewControllerDelegate;
@@ -89,6 +115,12 @@
 @property(nonatomic, assign) NSInteger minimumSelectImageCount; // 最少需要选择的图片数，默认为 0
 @property(nonatomic, copy) NSString *alertTitleWhenExceedMaxSelectImageCount; // 选择图片超出最大图片限制时 alertView 的标题
 @property(nonatomic, copy) NSString *alertButtonTitleWhenExceedMaxSelectImageCount; // 选择图片超出最大图片限制时 alertView 底部按钮的标题
+
+/**
+ *  加载相册列表时会出现 loading，若需要自定义 loading 的形式，可将该属性置为 NO，默认为 YES。
+ *  @see imagePickerViewControllerWillStartLoad: & imagePickerViewControllerWillFinishLoad:
+ */
+@property(nonatomic, assign) BOOL shouldShowDefaultLoadingView;
 
 @end
 
